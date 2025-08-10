@@ -3,6 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import LoaderOverlay from "../components/LoaderOverlay";
 import GlassButton from "../components/GlassButton";
+import { Sun, Moon } from "phosphor-react";
+
+
 function PathDetails() {
   const location = useLocation();
   const answers = location.state?.answers;
@@ -95,32 +98,21 @@ if (loading) return <LoaderOverlay text="در حال دریافت تحلیل م�
     flex flex-col items-center justify-center
     p-6 gap-6 font-sans"
   >
-    {/* ✅ دکمه دارک مود بالا چپ */}
-    <div className="absolute top-4 left-4 z-50">
-      <button
-        onClick={toggleTheme}
-        className="p-2 rounded-full border border-slate-600 dark:border-amber-500 bg-white/60 dark:bg-black/50 backdrop-blur hover:scale-105 transition"
-        aria-label="تغییر تم"
-      >
-        {isDark ? (
-          <svg
-            className="w-5 h-5 text-yellow-400"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 2.03a1 1 0 011.42 0l.71.71a1 1 0 01-1.42 1.42l-.71-.71a1 1 0 010-1.42zM17 9a1 1 0 110 2h-1a1 1 0 110-2h1zM4.22 4.03a1 1 0 000 1.42l.71.71a1 1 0 001.42-1.42l-.71-.71a1 1 0 00-1.42 0zM3 9a1 1 0 100 2H2a1 1 0 100-2h1zm3.05 6.95a1 1 0 010-1.42l.71-.71a1 1 0 111.42 1.42l-.71.71a1 1 0 01-1.42 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm6.36-1.05a1 1 0 01-1.42 0l-.71-.71a1 1 0 011.42-1.42l.71.71a1 1 0 010 1.42z" />
-          </svg>
-        ) : (
-          <svg
-            className="w-5 h-5 text-slate-600"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8 8 0 1010.586 10.586z" />
-          </svg>
-        )}
-      </button>
-    </div>
+{/* ✅ دکمه دارک مود بالا چپ */}
+<div className="absolute top-4 left-4 z-50">
+  <button
+    onClick={toggleTheme}
+    className="p-2 rounded-full border border-slate-600 dark:border-amber-500 
+               bg-white/60 dark:bg-black/50 backdrop-blur hover:scale-105 transition"
+    aria-label="تغییر تم"
+  >
+    {isDark ? (
+      <Sun size={20} weight="fill" className="text-yellow-400" />
+    ) : (
+      <Moon size={20} weight="fill" className="text-slate-700" />
+    )}
+  </button>
+</div>
 
     {/* ✅ عنوان صفحه */}
     <h1 className="text-4xl font-extrabold mt-10 text-gray-900 dark:text-amber-400 mb-6 text-center w-full">

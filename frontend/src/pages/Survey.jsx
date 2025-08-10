@@ -4,6 +4,7 @@ import { useGLTF } from "@react-three/drei";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import "../components/GlassButton.css";
+import { Sun, Moon } from "phosphor-react";
 
 const models = ["laptop", "keyboard", "case", "computer", "laptop", "keyboard" , "case"];
 
@@ -227,38 +228,32 @@ export default function Survey() {
           </Suspense>
         </Canvas>
       </div>
-      {/* ✅ دکمه دارک مود بالا چپ */}
-      <div className="absolute top-4 left-4 z-50">
-        <button
-          onClick={toggleTheme}
-          className="p-2 rounded-full border border-slate-600 dark:border-amber-500 bg-white/60 dark:bg-black/50 backdrop-blur hover:scale-105 transition"
-          aria-label="تغییر تم"
-        >
-          {isDark ? (
-            <svg
-              className="w-5 h-5 text-yellow-400"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 2.03a1 1 0 011.42 0l.71.71a1 1 0 01-1.42 1.42l-.71-.71a1 1 0 010-1.42zM17 9a1 1 0 110 2h-1a1 1 0 110-2h1zM4.22 4.03a1 1 0 000 1.42l.71.71a1 1 0 001.42-1.42l-.71-.71a1 1 0 00-1.42 0zM3 9a1 1 0 100 2H2a1 1 0 100-2h1zm3.05 6.95a1 1 0 010-1.42l.71-.71a1 1 0 111.42 1.42l-.71.71a1 1 0 01-1.42 0zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm6.36-1.05a1 1 0 01-1.42 0l-.71-.71a1 1 0 011.42-1.42l.71.71a1 1 0 010 1.42z" />
-            </svg>
-          ) : (
-            <svg
-              className="w-5 h-5 text-slate-600"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path d="M17.293 13.293A8 8 0 016.707 2.707a8 8 0 1010.586 10.586z" />
-            </svg>
-          )}
-        </button>
-      </div>
+{/* ✅ دکمه دارک مود بالا چپ */}
+<div className="absolute top-4 left-4 z-50">
+  <button
+    onClick={toggleTheme}
+    className="p-2 rounded-full border border-slate-600 dark:border-amber-500 
+               bg-white/60 dark:bg-black/50 backdrop-blur hover:scale-105 transition"
+    aria-label="تغییر تم"
+  >
+    {isDark ? (
+      <Sun size={20} weight="fill" className="text-yellow-400" />
+    ) : (
+      <Moon size={20} weight="fill" className="text-slate-700" />
+    )}
+  </button>
+</div>
+
       {/* فرم سوال */}
       <div className="w-full md:w-1/2 z-10 backdrop-blur-lg bg-white/20 dark:bg-white/5 border border-gray-600/80 dark:border-amber-500/60 rounded-xl p-6 md:p-10 md:mt-10 shadow-2xl space-y-6">
         <div className="flex justify-between items-center mb-2">
+                      <span className="text-2xs  text-black dark:text-gray-400">
+    {current.type === "multiple" ? "چند انتخابی" : "تک انتخابی"}
+  </span>
           <span className="text-xs text-black dark:text-gray-400">
             سؤال {step + 1} از {steps.length}
           </span>
+ 
         </div>
 
         <h2 className="text-xl md:text-2xl font-bold text-right">

@@ -1,11 +1,13 @@
 from pathlib import Path
 from decouple import config
-OPENAI_API_KEY = config("OPENAI_API_KEY")
 from datetime import timedelta
 
+# ------------------------
+# API Keys
+OPENAI_API_KEY = config("OPENAI_API_KEY")
 
-
-
+# ------------------------
+# JWT Auth
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -17,15 +19,16 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
-
+# ------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-nsa!f1o7&9i_ftsr=j!cb#*8t4ba6dctloj*lqt@3dloeka3jb'
-DEBUG = True
-ALLOWED_HOSTS = ['*']  # در توسعه مشکلی نیست
+SECRET_KEY = config("SECRET_KEY", default="django-insecure-...")
 
-# ------------------------------------------------------
-# ✅ اپ‌های نصب‌شده
+DEBUG = config("DEBUG", default=True, cast=bool)
+
+ALLOWED_HOSTS = ["*"]
+
+# ------------------------
 INSTALLED_APPS = [
     'corsheaders',                   
     'rest_framework',
@@ -39,11 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-# ------------------------------------------------------
-# ✅ میدل‌ورها
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',              # ← باید اول باشه
-    'django.middleware.common.CommonMiddleware',          # ← بعدش این
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -52,20 +53,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# ------------------------------------------------------
-# ✅ تنظیمات CORS
-CORS_ALLOW_ALL_ORIGINS = False  # امنیتی‌تره
+# ------------------------
+# CORS
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
-
-# در صورت نیاز به ارسال کوکی:
 CORS_ALLOW_CREDENTIALS = True
 
-# ------------------------------------------------------
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -85,17 +83,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# ------------------------------------------------------
-# دیتابیس پیش‌فرض SQLite
+# ------------------------
+# ✅ Postgres از .env
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config("POSTGRES_DB", default="vote3d"),
+        'USER': config("POSTGRES_USER", default="ali"),
+        'PASSWORD': config("POSTGRES_PASSWORD", default="ali123"),
+        'HOST': config("POSTGRES_HOST", default="db"),
+        'PORT': config("POSTGRES_PORT", default="5432"),
     }
 }
 
-# ------------------------------------------------------
-# رمزگذاری و ولیدیشن
+# ------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -103,23 +104,26 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# ------------------------------------------------------
-# تنظیمات بین‌المللی
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# ------------------------------------------------------
-# فایل‌های استاتیک
-STATIC_URL = 'static/'
+# ------------------------
+# Static & Media
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# ------------------------
+# Email Config
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "your_email@gmail.com"
-EMAIL_HOST_PASSWORD = "your_app_password"  # نه پسورد معمولی، اپ پسورد
-
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="your_email@gmail.com")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="your_app_password")

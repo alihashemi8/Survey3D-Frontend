@@ -10,6 +10,7 @@ import "../components/GlassButton.css";
 import StatsDisplay from "../components/StatsDisplay";
 import AuthForm from "../components/auth/AuthForm";
 import useAuth from "../hooks/useAuth";
+import { Sun, Moon } from "phosphor-react";
 
 // مدل سه‌بعدی Wall-E
 function WallEModel(props) {
@@ -94,29 +95,18 @@ export default function Landing() {
         dark:bg-gradient-to-br dark:from-black dark:via-gray-800 dark:to-black dark:text-white 
         flex flex-col-reverse md:flex-row items-center px-6 md:px-20 py-12 gap-12 md:gap-24"
       >
-        {/* دکمه تغییر تم */}
+        {/* ✅ دکمه دارک مود بالا چپ */}
         <div className="absolute top-4 left-4 z-50">
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-full border border-slate-600 dark:border-amber-500 bg-white/60 dark:bg-black/50 backdrop-blur hover:scale-105 transition"
+            className="p-2 rounded-full border border-slate-600 dark:border-amber-500 
+               bg-white/60 dark:bg-black/50 backdrop-blur hover:scale-105 transition"
             aria-label="تغییر تم"
           >
             {isDark ? (
-              <svg
-                className="w-5 h-5 text-yellow-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1z..." />
-              </svg>
+              <Sun size={20} weight="fill" className="text-yellow-400" />
             ) : (
-              <svg
-                className="w-5 h-5 text-slate-600"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M17.293 13.293A8 8 0 016.707 2.707a8 8 0 1010.586 10.586z" />
-              </svg>
+              <Moon size={20} weight="fill" className="text-slate-700" />
             )}
           </button>
         </div>
@@ -189,16 +179,9 @@ export default function Landing() {
       {showAuthBox && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 ">
           <div className="relative  p-6 rounded-xl  w-full max-w-md">
-            {/* دکمه بستن */}
-            <button
-              onClick={() => setShowAuthBox(false)}
-              className="absolute top-0 text-4xl right-0  text-gray-500 hover:text-red-500 "
-            >
-              ×
-            </button>
-
             {/* فرم لاگین */}
             <AuthForm
+              onClose={() => setShowAuthBox(false)}
               onLogin={(newToken) => {
                 login(newToken);
                 setShowAuthBox(false);
