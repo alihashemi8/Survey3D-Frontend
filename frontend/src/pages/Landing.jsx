@@ -12,6 +12,7 @@ import AuthForm from "../components/auth/AuthForm";
 import useAuth from "../hooks/useAuth";
 import { Sun, Moon } from "phosphor-react";
 
+
 // مدل سه‌بعدی Wall-E
 function WallEModel(props) {
   const { scene } = useGLTF("/models/wall_e.glb");
