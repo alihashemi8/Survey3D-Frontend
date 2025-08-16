@@ -1,10 +1,10 @@
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
-
+from decouple import config
 # ------------------------
 # API Keys
-OPENAI_API_KEY = config("OPENAI_API_KEY")
+OPENAI_API_KEY = config("OPENAI_API_KEY", default="")
 
 # ------------------------
 # JWT Auth
@@ -22,15 +22,20 @@ SIMPLE_JWT = {
 # ------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = config("SECRET_KEY", default="django-insecure-...")
+SECRET_KEY = config("SECRET_KEY", default="django-insecure-key")
 
-DEBUG = config("DEBUG", default=True, cast=bool)
+DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    config("LIARA_APP_DOMAIN", default=""),   # دامنه پروژه روی لیارا
+    config("CUSTOM_DOMAIN", default=""),      # اگر دامنه اختصاصی وصل کردی
+]
 
 # ------------------------
 INSTALLED_APPS = [
-    'corsheaders',                   
+    'corsheaders',
     'rest_framework',
     'survey',
     'accounts',
@@ -54,16 +59,30 @@ MIDDLEWARE = [
 ]
 
 # ------------------------
-# CORS
+# CORS Settings
 CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_CREDENTIALS = True
+
+# پایه لیست Origins
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://survey-frontend.liara.run",
 ]
-CORS_ALLOW_CREDENTIALS = True
 
+# اضافه کردن دامین‌های اختیاری فقط اگر مقدار تعریف شده باشه
+liara_domain = config('LIARA_APP_DOMAIN', default=None)
+custom_domain = config('CUSTOM_DOMAIN', default=None)
+
+if liara_domain:
+    CORS_ALLOWED_ORIGINS.append(f"https://{liara_domain}")
+
+if custom_domain:
+    CORS_ALLOWED_ORIGINS.append(f"https://{custom_domain}")
+
+# ------------------------
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -84,15 +103,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # ------------------------
-# ✅ Postgres از .env
+# Database (Postgres روی لیارا)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config("POSTGRES_DB", default="vote3d"),
-        'USER': config("POSTGRES_USER", default="ali"),
-        'PASSWORD': config("POSTGRES_PASSWORD", default="ali123"),
-        'HOST': config("POSTGRES_HOST", default="db"),
-        'PORT': config("POSTGRES_PORT", default="5432"),
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT', default='5432'),
     }
 }
 
@@ -120,10 +139,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ------------------------
-# Email Config
+# Email Config (میلچی یا جیمیل)
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="your_email@gmail.com")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="your_app_password")
+EMAIL_HOST = config("EMAIL_HOST", default="smtp.gmail.com")
+EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
