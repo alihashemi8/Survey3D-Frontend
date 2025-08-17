@@ -34,7 +34,7 @@ export default function AuthForm({ onClose, onLogin }) {
       setError("خطا در اتصال به سرور");
     }
 
-    setLoading(true);
+    setLoading(false);
   };
 
   return (
