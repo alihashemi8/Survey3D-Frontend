@@ -54,7 +54,7 @@ const navigate = useNavigate();
 
       try {
         console.log("🔍 در حال ارسال به بک‌اند:", answers);
-        const response = await axios.post("http://127.0.0.1:8000/api/chatgpt_analysis/", { answers });
+        const response = await axios.post("https://survey-backend.liara.run/api/chatgpt_analysis/", { answers });
         console.log("✅ تحلیل دریافت شد:", response.data);
         setAnalysis(response.data);
       } catch (err) {

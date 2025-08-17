@@ -103,7 +103,7 @@ export default function Result() {
   // 🔐 بازیابی جواب‌ها از state یا localStorage
   const answers =
     location.state?.answers ||
-    JSON.parse(localStorage.getItem("answers") || "{}");
+    JSON.parse(Storage.getItem("answers") || "{}");
 
   const analysis = analyzePath(answers || {});
 
@@ -119,14 +119,14 @@ export default function Result() {
 
         // ارسال کل جواب‌ها به submit/
         const response = await axios.post(
-          "https://survey-backend.liara.run",
+          "https://survey-backend.liara.run/api/submit/",
           answers
         );
         console.log("✅ Backend response:", response.data);
 
         // 🆕 ارسال رشته محبوب (analysis.mainPathKey) به save-major/
         if (analysis?.mainPathKey) {
-          await axios.post("https://survey-backend.liara.run", {
+          await axios.post("https://survey-backend.liara.run/api/save-major/", {
             major: analysis.mainPathKey,
           });
           console.log("✅ major ذخیره شد:", analysis.mainPathKey);
