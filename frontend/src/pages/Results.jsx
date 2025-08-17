@@ -119,14 +119,14 @@ export default function Result() {
 
         // ارسال کل جواب‌ها به submit/
         const response = await axios.post(
-          "http://localhost:8000/api/submit/",
+          "https://survey-backend.liara.run",
           answers
         );
         console.log("✅ Backend response:", response.data);
 
         // 🆕 ارسال رشته محبوب (analysis.mainPathKey) به save-major/
         if (analysis?.mainPathKey) {
-          await axios.post("http://localhost:8000/api/save-major/", {
+          await axios.post("https://survey-backend.liara.run", {
             major: analysis.mainPathKey,
           });
           console.log("✅ major ذخیره شد:", analysis.mainPathKey);

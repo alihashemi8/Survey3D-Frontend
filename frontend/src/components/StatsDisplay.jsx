@@ -4,7 +4,7 @@ export default function StatsDisplay() {
   const [data, setData] = useState(null);
 
 useEffect(() => {
-  fetch("http://localhost:8000/api/landing-stats/")
+  fetch("https://survey-backend.liara.run")
     .then(res => res.json())
     .then((result) => {
       console.log("📊 دریافت شد:", result);

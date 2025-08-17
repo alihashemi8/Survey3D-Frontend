@@ -14,8 +14,8 @@ export default function AuthForm({ onClose, onLogin }) {
 
     const endpoint =
       mode === "login"
-        ? "http://localhost:8000/api/login/"
-        : "http://localhost:8000/api/register/";
+        ? "https://survey-backend.liara.run"
+        : "https://survey-backend.liara.run";
 
     try {
       const res = await fetch(endpoint, {
