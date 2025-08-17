@@ -1,0 +1,53 @@
+.survey-container {
+  display: flex;
+  flex-direction: row;
+  height: 100dvh;
+  width: 100%;
+  background: radial-gradient(#0f0f1a, #000);
+  color: white;
+}
+
+.model-section {
+  flex: 1;
+  height: 100%;
+}
+
+.form-section {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.question-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.btn-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+@media screen and (max-width: 768px) {
+  .survey-container {
+    flex-direction: column;
+  }
+
+  .model-section {
+    height: 300px;
+  }
+
+  .form-section {
+    padding: 1rem;
+  }
+}
