@@ -102,8 +102,7 @@ export default function Result() {
 
   // 🔐 بازیابی جواب‌ها از state یا localStorage
   const answers =
-    location.state?.answers ||
-    JSON.parse(Storage.getItem("answers") || "{}");
+    location.state?.answers || JSON.parse(Storage.getItem("answers") || "{}");
 
   const analysis = analyzePath(answers || {});
 
@@ -157,21 +156,21 @@ export default function Result() {
           <OrbitControls enableZoom={false} enablePan={false} />
         </Canvas>
       </div>
-{/* ✅ دکمه دارک مود بالا چپ */}
-<div className="absolute top-4 left-4 z-50">
-  <button
-    onClick={toggleTheme}
-    className="p-2 rounded-full border border-slate-600 dark:border-amber-500 
+      {/* ✅ دکمه دارک مود بالا چپ */}
+      <div className="absolute top-4 left-4 z-50">
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-full border border-slate-600 dark:border-amber-500 
                bg-white/60 dark:bg-black/50 backdrop-blur hover:scale-105 transition"
-    aria-label="تغییر تم"
-  >
-    {isDark ? (
-      <Sun size={20} weight="fill" className="text-yellow-400" />
-    ) : (
-      <Moon size={20} weight="fill" className="text-slate-700" />
-    )}
-  </button>
-</div>
+          aria-label="تغییر تم"
+        >
+          {isDark ? (
+            <Sun size={20} weight="fill" className="text-yellow-400" />
+          ) : (
+            <Moon size={20} weight="fill" className="text-slate-700" />
+          )}
+        </button>
+      </div>
 
       <div className="w-full md:w-1/2 space-y-6 text-center md:text-right px-4 md:px-10">
         <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-l from-black to-gray-700 dark:from-white dark:via-sky-50 dark:to-amber-300">
