@@ -101,8 +101,9 @@ export default function Result() {
   };
 
   // 🔐 بازیابی جواب‌ها از state یا localStorage
-  const answers =
-    location.state?.answers || JSON.parse(Storage.getItem("answers") || "{}");
+const answers =
+  location.state?.answers || JSON.parse(localStorage.getItem("answers") || "{}");
+
 
   const analysis = analyzePath(answers || {});
 

@@ -7,35 +7,39 @@ export default function AuthForm({ onClose, onLogin }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
+  setLoading(true);
 
-    const endpoint =
-      mode === "login"
-        ? "https://survey-backend.liara.run/api/login/"
-        : "https://survey-backend.liara.run/api/register/";
+  const endpoint =
+    mode === "login"
+      ? "https://survey-backend.liara.run/api/login/"
+      : "https://survey-backend.liara.run/api/register/";
 
-    try {
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+  try {
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
 
-      const data = await res.json();
-      if (res.ok && data.token) {
-        onLogin(data.token);
-      } else {
-        setError(data.message || "خطا در ورود یا ثبت‌نام");
-      }
-    } catch (err) {
-      setError("خطا در اتصال به سرور");
+    // اگه پاسخ JSON نبود، کرش نکنه
+    const text = await res.text();
+    const data = text ? JSON.parse(text) : {};
+
+    if (res.ok && data.token) {
+      onLogin(data.token);
+    } else {
+      setError(data.message || "خطا در ورود یا ثبت‌نام");
     }
-
+  } catch {
+    setError("خطا در اتصال به سرور");
+  } finally {
     setLoading(false);
-  };
+  }
+};
+
 
   return (
     <div
