@@ -134,17 +134,14 @@ USE_TZ = True
 
 # ------------------------
 # ------------------------
-# Static & Media
+# STATIC
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, '..', 'frontend', 'dist', 'assets'),
-]
-
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = []  # خالی باشه چون همه فایل‌ها داخل STATIC_ROOT هستن
 
+# MEDIA
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # ------------------------
 # Email
