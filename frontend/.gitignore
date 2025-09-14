@@ -7,14 +7,25 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist-ssr
+# Node / build
+node_modules/
+dist-ssr/
 *.local
 
-# Editor directories and files
+# Frontend build (چون روی لیارا داریم deploy می‌کنیم، build داخل repo باشه)
+# frontend/dist/
+
+# Python
+*.pyc
+__pycache__/
+
+# Django
+backend/staticfiles/
+
+# Editor
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
