@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Suspense, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import ResultSummary from "../components/ResultSummary";
-import { analyzePath } from "../utils/analyzePath";
 import { pathInfo } from "../utils/pathInfo";
 import { Sun, Moon } from "phosphor-react";
 
@@ -71,7 +70,6 @@ export default function Result() {
 
   // ✅ دارک مود: مدیریت وضعیت تم
   const [isDark, setIsDark] = useState(false);
-
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
     const systemPrefersDark = window.matchMedia(
@@ -102,45 +100,53 @@ export default function Result() {
 
   // 🔐 بازیابی جواب‌ها از state یا localStorage
   const answers =
-    location.state?.answers || JSON.parse(Storage.getItem("answers") || "{}");
+    location.state?.answers || JSON.parse(localStorage.getItem("answers") || "{}");
 
-  const analysis = analyzePath(answers || {});
+  // ✅ اضافه کردن analysis و مدیریت state
+  const [analysis, setAnalysis] = useState(null);
+  const [loadingAnalysis, setLoadingAnalysis] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  // ✅ گرفتن تحلیل مسیر شغلی از بک‌اند
   useEffect(() => {
     if (!answers || Object.keys(answers).length === 0) {
       console.warn("❗ داده‌ای برای ارسال به بک‌اند وجود ندارد");
       return;
     }
 
-    const sendToBackend = async () => {
+    const fetchAnalysis = async () => {
+      setLoadingAnalysis(true);
       try {
-        console.log("در حال ارسال به بک‌اند:", answers);
+        const response = await axios.post(`${API_URL}/api/chatgpt_analysis/`, { answers });
+        setAnalysis(response.data);
+        console.log("✅ تحلیل دریافت شد:", response.data);
 
         // ارسال کل جواب‌ها به submit/
-        const response = await axios.post(
-          "https://survey-backend.liara.run/api/submit/",
-          answers
-        );
-        console.log("✅ Backend response:", response.data);
+        await axios.post(`${API_URL}/api/submit/`, answers);
 
-        // 🆕 ارسال رشته محبوب (analysis.mainPathKey) به save-major/
-        if (analysis?.mainPathKey) {
-          await axios.post("https://survey-backend.liara.run/api/save-major/", {
-            major: analysis.mainPathKey,
+        // ارسال رشته محبوب به save-major/
+        if (response.data?.mainPathKey) {
+          await axios.post(`${API_URL}/api/save-major/`, {
+            major: response.data.mainPathKey,
           });
-          console.log("✅ major ذخیره شد:", analysis.mainPathKey);
-        } else {
-          console.warn("⚠️ رشته‌ای برای ارسال وجود ندارد");
+          console.log("✅ major ذخیره شد:", response.data.mainPathKey);
         }
       } catch (err) {
-        console.error("❌ Error sending data:", err.message);
+        console.error("❌ خطا در ارتباط با بک‌اند:", err.message);
+      } finally {
+        setLoadingAnalysis(false);
       }
     };
 
-    sendToBackend();
+    fetchAnalysis();
   }, [answers]);
+
+  if (loadingAnalysis) return <p className="text-center mt-10">در حال دریافت تحلیل...</p>;
+  if (!analysis) return <p className="text-center mt-10">تحلیلی دریافت نشد</p>;
+
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br  from-amber-400 via-blue-100 to-amber-500 dark:from-black dark:via-gray-800 dark:to-black text-white flex flex-col md:flex-row-reverse items-center justify-center gap-6 p-6 md:p-12">
+    <div className="min-h-screen w-full bg-gradient-to-br from-amber-400 via-blue-100 to-amber-500 dark:from-black dark:via-gray-800 dark:to-black text-white flex flex-col md:flex-row-reverse items-center justify-center gap-6 p-6 md:p-12">
       <div className="w-full md:w-1/2 h-[300px] md:h-[500px]">
         <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
           <ambientLight intensity={1} />
@@ -156,6 +162,7 @@ export default function Result() {
           <OrbitControls enableZoom={false} enablePan={false} />
         </Canvas>
       </div>
+
       {/* ✅ دکمه دارک مود بالا چپ */}
       <div className="absolute top-4 left-4 z-50">
         <button
@@ -199,7 +206,7 @@ export default function Result() {
           >
             توضیحات کامل + نقشه راه
           </button>
-          {/* دکمه بازگشت به Survey */}
+
           <button
             onClick={() => navigate("/survey")}
             className="bg-white/40 dark:bg-white/20 border-b-2 border-l-2  border border-l-gray-600 border-b-gray-600 border-r-gray-600 dark:border-l-amber-300 dark:border-b-amber-300 dark:border-r-amber-300 shadow-md/80 shadow-md hover:shadow-lg shadow-blue-300 hover:shadow-blue-400 dark:hover:shadow-amber-400 dark:shadow-amber-300 text-gray-900 dark:text-white px-6 py-3 rounded-lg hover:bg-white/2 dark:hover:bg-white/30 hover:scale-102 transition"

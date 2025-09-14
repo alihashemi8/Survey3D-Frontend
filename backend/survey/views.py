@@ -8,6 +8,10 @@ from dotenv import load_dotenv
 import re
 from django.http import JsonResponse
 from .models import SurveyResponse
+from django.shortcuts import render
+
+def index(request):
+    return render(request, 'index.html')
 
 
 load_dotenv()
@@ -115,11 +119,10 @@ def landing_stats(request):
 
     majors = {}
     for result in all_results:
-        first_answer = result.answers[0] if result.answers else None
-        if first_answer:
-            majors[first_answer] = majors.get(first_answer, 0) + 1
-
+        for key, value in result.answers.items():
+            majors[value] = majors.get(value, 0) + 1
     most_popular = max(majors, key=majors.get) if majors else None
+
 
     return Response({
         'most_popular_major': most_popular,

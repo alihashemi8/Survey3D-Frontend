@@ -45,27 +45,30 @@ const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchAnalysis = async () => {
-      if (!answers) return;
+const API_URL = import.meta.env.VITE_API_URL;
 
-      setLoading(true);
-      setError(null);
+useEffect(() => {
+  const fetchAnalysis = async () => {
+    if (!answers) return;
 
-      try {
-        console.log("🔍 در حال ارسال به بک‌اند:", answers);
-        const response = await axios.post("https://survey-backend.liara.run/api/chatgpt_analysis/", { answers });
-        console.log("✅ تحلیل دریافت شد:", response.data);
-        setAnalysis(response.data);
-      } catch (err) {
-        setError(err.message || "خطا در دریافت داده");
-      } finally {
-        setLoading(false);
-      }
-    };
+    setLoading(true);
+    setError(null);
 
-    fetchAnalysis();
-  }, [answers]);
+    try {
+      console.log("🔍 در حال ارسال به بک‌اند:", answers);
+      const response = await axios.post(`${API_URL}/api/chatgpt_analysis/`, { answers });
+      console.log("✅ تحلیل دریافت شد:", response.data);
+      setAnalysis(response.data);
+    } catch (err) {
+      setError(err.message || "خطا در دریافت داده");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchAnalysis();
+}, [answers]);
+
 
 if (loading) return <LoaderOverlay text="در حال دریافت تحلیل مسیر شغلی..." />;
   if (error) return <div className="p-6 text-red-400 text-center">خطا: {error}</div>;
