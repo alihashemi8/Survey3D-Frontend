@@ -78,19 +78,20 @@ ROOT_URLCONF = 'config.urls'
 # Templates (اضافه کردن build React)
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # ← این خط خیلی مهمه
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "frontend_dist"],  # index.html اینجاست
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
+
 
 
 
@@ -136,10 +137,14 @@ USE_TZ = True
 # ------------------------
 # ------------------------
 # STATIC
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# فایل‌های استاتیک React
 STATICFILES_DIRS = [
-    BASE_DIR / 'frontend' / 'dist' / 'assets',
+    BASE_DIR / "frontend_dist/assets",
 ]
 
 # MEDIA
